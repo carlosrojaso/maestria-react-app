@@ -2,6 +2,7 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Item from './Item';
+import { DummyData } from '../data/dummy-data';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) =>
 
 const Items = () => {
     const classes = useStyles();
-    const itemsArray = [0,1,2,3,4,5,6,7,8,9,10];
+    const itemsArray = DummyData;
     return (
         <div className={classes.root}>
           <List>
