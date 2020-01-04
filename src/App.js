@@ -10,12 +10,13 @@ import Items from './components/Items';
 import SimpleModal from './components/SimpleModal';
 
 import { DummyData } from './data/dummy-data';
+import uuidv4 from 'uuid/v4';
 
 const App = () => {
 
   const [itemsArray, setItemsArray] = useState(DummyData);
 
-  const removeFromOrder = (key) => {
+  const removeFromList = (key) => {
  
     const tmpList = [...itemsArray];
 
@@ -24,6 +25,16 @@ const App = () => {
 
     setItemsArray(tmpList);
   };
+
+  const addToList = (item) => {
+    const tmpList = [...itemsArray];
+
+    const newIndex = uuidv4();
+    item.id = newIndex;
+    tmpList.push(item);
+
+    setItemsArray(tmpList);
+  }
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -43,10 +54,10 @@ const App = () => {
       <Container>
         <Items 
           items={itemsArray}
-          removeFromList={removeFromOrder}
+          removeFromList={removeFromList}
         />
       </Container>
-      <SimpleModal open={openModal} handleClose={handleClose}/>
+      <SimpleModal open={openModal} handleClose={handleClose} addToList={addToList}/>
       <MyFooter handleOpen={handleOpen}/>
     </React.Fragment>
   );
