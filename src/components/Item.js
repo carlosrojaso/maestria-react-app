@@ -7,21 +7,23 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 const Item = (props) => {
-    const itemsArray = props.itemsArray;
+    const itemsArray = props.items;
     return (
         itemsArray.map((item) => {
             return (
-            <ListItem>
+            <ListItem
+                key={item.id}
+            >
                 <ListItemText 
                     primary={item.name}
                     secondary={item.description}
                 />
                 <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton edge="end" aria-label="delete">
                       <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => props.remove(item.id)} edge="end" aria-label="delete">
+                      <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
             </ListItem>

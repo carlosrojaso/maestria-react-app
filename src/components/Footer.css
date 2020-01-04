@@ -1,8 +1,15 @@
 .footer {
     display: flex;
-    align-items: center;
-    background-color: black;
-    color: white;
+    justify-content: flex-end;
+    background-color: gainsboro;
+    padding: 5px;
     width: 100%;
-    min-height: 40px;
+    height: 40px;
+}
+
+.fabContainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 10px;
 }
