@@ -8,6 +8,8 @@ import MyHeader from './components/Header';
 import MyFooter from './components/Footer';
 import Items from './components/Items';
 import SimpleModal from './components/SimpleModal';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add'
 
 import { notesDataApi } from './data/notes-data-api';
 import uuidv4 from 'uuid/v4';
@@ -123,7 +125,12 @@ const App = () => {
         isEditing={isEditing}
         itemToEdit={itemToEdit}
       />
-      <MyFooter handleOpen={handleOpen}/>
+      <div className="fabContainer">
+        <Fab onClick={() => handleOpen()} color="primary" aria-label="add">
+            <AddIcon />
+        </Fab>
+      </div>
+      <MyFooter/>
     </React.Fragment>
   );
 }

@@ -1,17 +1,17 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
     },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'left',
-      color: theme.palette.text.secondary,
-    },
+    title: {
+      flexGrow: 1,
+    }
   }));
 
 const MyHeader = () => {
@@ -19,11 +19,15 @@ const MyHeader = () => {
 
     return (
     <div className={classes.root}>
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>my-react-app</Paper>
-        </Grid>
-      </Grid>
+      <AppBar position="static">
+        <Toolbar variant="dense">
+          <Typography className={classes.title} variant="h6" color="inherit">
+            react-app
+          </Typography>
+          <Button href="/" color="inherit">Home</Button>
+          <Button href="/about" color="inherit">About</Button>
+        </Toolbar>
+      </AppBar>
     </div>
     );
 }
