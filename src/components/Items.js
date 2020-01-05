@@ -20,7 +20,10 @@ const Items = (props) => {
     return (
         <div className={classes.root}>
           <List>
-            <Item items={props.items} remove={props.removeFromList}/>
+            <Item
+              items={props.items}
+              edit={props.getItemToEdit}
+              remove={props.removeFromList}/>
           </List>
         </div>
       );

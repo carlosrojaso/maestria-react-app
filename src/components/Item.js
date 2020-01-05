@@ -19,7 +19,7 @@ const Item = (props) => {
                     secondary={item.description}
                 />
                 <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton onClick={() => props.edit(item.id)} edge="end" aria-label="edit">
                       <EditIcon />
                     </IconButton>
                     <IconButton onClick={() => props.remove(item.id)} edge="end" aria-label="delete">
