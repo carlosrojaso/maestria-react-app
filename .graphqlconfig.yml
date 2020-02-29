@@ -1,0 +1,15 @@
+projects:
+  maestriajsangularapp-dev:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
+        region: us-east-1
+        apiId: u7lvlcgih5es7m7akqve5pwwmu
+        maxDepth: 2

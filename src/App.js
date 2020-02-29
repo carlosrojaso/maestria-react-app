@@ -10,9 +10,14 @@ import Items from './components/Items';
 import SimpleModal from './components/SimpleModal';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add'
-
-import { notesDataApi } from './data/notes-data-api';
 import uuidv4 from 'uuid/v4';
+
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
+import { DataStore } from "@aws-amplify/datastore";
+import { Todo } from './models';
+
+Amplify.configure(awsconfig)
 
 const App = () => {
 
@@ -21,51 +26,60 @@ const App = () => {
   const [itemToEdit, setItemToEdit] = useState({});
 
   useEffect(() => {
-    notesDataApi.getTasks()
-    .then((res) => res.json())
-    .then((items) => {
-      const allItems = items.map((item) => ({id: item.id, name: item.title, description: item.body}));
-      setItemsArray(allItems);
-      });
+      getTasks().then(
+        (elems) => {
+          const allItems = elems;
+          setItemsArray(allItems);
+        }
+      );
   }, []);
 
-  const addToList = (item) => {
+  const getTasks = async () => {
+    const todos = await DataStore.query(Todo);
+    return todos.map((elem) => ({...elem}));
+  }
+
+  const addToList = async (item) => {
 
     const tmpList = [...itemsArray];
 
     const newIndex = uuidv4();
     item.id = newIndex;
 
-    notesDataApi.createTask(item)
-        .then(res => res.json())
-        .then(
-          () => {
-            tmpList.push(item);
+    await DataStore.save(new Todo(
+      item
+    )).then(
+      () => {
+        tmpList.push(item);
 
-            setItemsArray(tmpList);
-          }
-        );
+        setItemsArray(tmpList);
+      }
+    );
   };
 
-  const editFromList = (item) => {
+  const editFromList = async (item) => {
     
     const tmpList = [...itemsArray];
 
-    const itemIndex = itemsArray.findIndex((elem) => (elem.id === item.id));
+    const original = await DataStore.query(Todo, item.id);
 
-    notesDataApi.putTask(item)
-          .then(res => res.json())
-          .then(
-            () => {
-              tmpList[itemIndex] = {...item};
+    await DataStore.save(
+      Todo.copyOf(original, updated => {
+        updated.name = item.name;
+        updated.description = item.description;
+      })
+    ).then(
+      () => {
+        const originalNote = tmpList.findIndex((elem) => (elem.id === item.id));
+        tmpList[originalNote] = {...item};
 
-              setItemsArray(tmpList);
-              setItemToEdit({});
-              setIsEditing(false);
+        setItemsArray(tmpList);
+        setItemToEdit({});
+        setIsEditing(false);
 
-              handleClose();
-            }
-          );
+        handleClose();
+      }
+    );
   };
 
   const getItemToEdit = (id) => {
@@ -79,20 +93,20 @@ const App = () => {
     handleOpen();
   };
 
-  const removeFromList = (key) => {
+  const removeFromList = async (key) => {
  
     const tmpList = [...itemsArray];
 
-    const itemIndex = itemsArray.findIndex((item) => (item.id === key));
-    notesDataApi.deleteTask(key)
-        .then(res => res.json())
-        .then(
-          () => {
-            tmpList.splice(itemIndex,1);
+    const todelete = await DataStore.query(Todo, key);
 
-            setItemsArray(tmpList);
-          }
-        );
+    DataStore.delete(todelete).then(
+      () => {
+        const itemIndex = itemsArray.findIndex((item) => (item.id === key));
+        tmpList.splice(itemIndex,1);
+
+        setItemsArray(tmpList);
+      }
+    );
   };
 
   const [openModal, setOpenModal] = useState(false);
