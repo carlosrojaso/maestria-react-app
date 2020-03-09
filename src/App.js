@@ -11,6 +11,12 @@ import SimpleModal from './components/SimpleModal';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add'
 
+import AWSAppSyncClient from 'aws-appsync';
+import awsmobile from './aws-exports';
+import { ApolloProvider } from 'react-apollo';
+import { Rehydrated } from 'aws-appsync-react';
+
+
 import { notesDataApi } from './data/notes-data-api';
 import uuidv4 from 'uuid/v4';
 
@@ -133,6 +139,25 @@ const App = () => {
       <MyFooter/>
     </React.Fragment>
   );
-}
+};
 
-export default App;
+// export default App;
+
+const client = new AWSAppSyncClient({
+  url: awsmobile.aws_appsync_graphqlEndpoint,
+  region: awsmobile.aws_appsync_region,
+  auth: {
+    type: awsmobile.aws_appsync_authenticationType,
+    apiKey: awsmobile.aws_appsync_apiKey
+  }
+});
+
+const WithProvider = () => (
+  <ApolloProvider client={client}>
+    <Rehydrated>
+      <App />
+    </Rehydrated>
+  </ApolloProvider>
+)
+
+export default WithProvider;
